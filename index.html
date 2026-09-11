@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>King of Saloon</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Splash -->
+  <section id="splashScreen" class="screen splash-screen">
+    <img src="logo.png" alt="King of Saloon Logo" class="logo">
+    <p class="tagline">LOOK GOOD • FEEL BETTER</p>
+  </section>
+
+  <!-- Home -->
+  <section id="homeScreen" class="screen app-screen hidden">
+    <header class="app-header">
+      
+      <img src="logo.png" alt="King of Saloon Logo" class="home-logo">
+      <h1>King of Saloon</h1>
+      <p>Welcome</p>
+    </header>
+
+    <main class="home-buttons">
+      <button id="newEntryBtn" class="gold-btn">✦ &nbsp; New Entry</button>
+      <button id="viewDataBtn" class="outline-btn">◉ &nbsp; View Data</button>
+    </main>
+
+    <nav class="bottom-nav">
+      <button class="nav-item active" data-nav="home"><span>⌂</span><small>Home</small></button>
+      <button class="nav-item" data-nav="new"><span>＋</span><small>New Entry</small></button>
+      <button class="nav-item" data-nav="view"><span>▣</span><small>View Data</small></button>
+    </nav>
+  </section>
+
+  <!-- New Entry -->
+  <section id="newEntryScreen" class="screen app-screen hidden">
+    <header class="page-header">
+      <button class="back-btn" data-back="home">←</button>
+      <h2>New Entry</h2>
+    </header>
+
+    <form id="entryForm" class="entry-form" novalidate>
+      <div class="field">
+        <label>Serial Number</label>
+        <input id="serialNumber" type="text" readonly>
+      </div>
+
+      <div class="field">
+        <label>Date</label>
+        <input id="entryDate" type="date" readonly>
+      </div>
+
+      <div class="field">
+        <label>Customer Name <span>*</span></label>
+        <input id="customerName" type="text" placeholder="Enter customer name" maxlength="60">
+        <small class="error" id="customerError"></small>
+      </div>
+
+      <div class="field">
+        <label>Work Description <span>*</span></label>
+        <textarea id="workDescription" placeholder="Enter work description" maxlength="150"></textarea>
+        <small class="error" id="workError"></small>
+      </div>
+
+      <div class="field">
+        <label>Price <span>*</span></label>
+        <div class="price-input">
+          <span>₹</span>
+          <input id="price" type="number" min="1" step="1" placeholder="Enter amount">
+        </div>
+        <small class="error" id="priceError"></small>
+      </div>
+
+      <div class="field">
+        <label>Payment Method <span>*</span></label>
+        <select id="paymentMethod">
+          <option value="">Select payment method</option>
+          <option value="Cash">Cash</option>
+          <option value="UPI">UPI</option>
+          <option value="Card">Card</option>
+          <option value="Other">Other</option>
+        </select>
+        <small class="error" id="paymentError"></small>
+      </div>
+
+      <button type="submit" class="gold-btn submit-btn">Submit</button>
+    </form>
+
+    <nav class="bottom-nav">
+      <button class="nav-item" data-nav="home"><span>⌂</span><small>Home</small></button>
+      <button class="nav-item active" data-nav="new"><span>＋</span><small>New Entry</small></button>
+      <button class="nav-item" data-nav="view"><span>▣</span><small>View Data</small></button>
+    </nav>
+  </section>
+
+  <!-- View Data -->
+  <section id="viewDataScreen" class="screen app-screen hidden">
+    <header class="page-header">
+      <button class="back-btn" data-back="home">←</button>
+      <h2>View Data</h2>
+    </header>
+
+    <div class="filter-section">
+      <label for="dateRange">Date Range</label>
+      <select id="dateRange">
+        <option value="today">Today</option>
+        <option value="yesterday">Yesterday</option>
+        <option value="7days">Last 7 Days</option>
+        <option value="30days">Last 30 Days</option>
+      </select>
+    </div>
+
+    <div class="summary-card">
+      <div>
+        <small>Total Entries</small>
+        <strong id="totalEntries">0</strong>
+      </div>
+      <div>
+        <small>Total Amount</small>
+        <strong id="totalAmount">₹0</strong>
+      </div>
+    </div>
+
+    <div class="payment-summary">
+      <div><span>Cash</span><strong id="cashTotal">₹0</strong></div>
+      <div><span>UPI</span><strong id="upiTotal">₹0</strong></div>
+      <div><span>Card</span><strong id="cardTotal">₹0</strong></div>
+    </div>
+
+    <div class="search-box">
+      <span>🔍</span>
+      <input id="customerSearch" type="search" placeholder="Search customer name">
+    </div>
+
+    <div id="dataList" class="data-list"></div>
+
+    <div id="noData" class="no-data hidden">
+      <div>📋</div>
+      <p>No entries found</p>
+      <small>Try another date range.</small>
+    </div>
+
+    <nav class="bottom-nav">
+      <button class="nav-item" data-nav="home"><span>⌂</span><small>Home</small></button>
+      <button class="nav-item" data-nav="new"><span>＋</span><small>New Entry</small></button>
+      <button class="nav-item active" data-nav="view"><span>▣</span><small>View Data</small></button>
+    </nav>
+  </section>
+
+  <!-- Edit Entry Modal -->
+  <div id="editModal" class="popup-overlay hidden">
+    <div class="edit-modal">
+      <div class="modal-head">
+        <h3>Edit Entry</h3>
+        <button id="closeEditBtn" class="modal-close">×</button>
+      </div>
+
+      <form id="editForm" class="entry-form" novalidate>
+        <input id="editId" type="hidden">
+
+        <div class="field">
+          <label>Serial Number</label>
+          <input id="editSerial" type="text" readonly>
+        </div>
+
+        <div class="field">
+          <label>Date</label>
+          <input id="editDate" type="date" readonly>
+        </div>
+
+        <div class="field">
+          <label>Customer Name <span>*</span></label>
+          <input id="editCustomer" type="text" maxlength="60">
+          <small class="error" id="editCustomerError"></small>
+        </div>
+
+        <div class="field">
+          <label>Work Description <span>*</span></label>
+          <textarea id="editWork" maxlength="150"></textarea>
+          <small class="error" id="editWorkError"></small>
+        </div>
+
+        <div class="field">
+          <label>Price <span>*</span></label>
+          <div class="price-input">
+            <span>₹</span>
+            <input id="editPrice" type="number" min="1" step="1">
+          </div>
+          <small class="error" id="editPriceError"></small>
+        </div>
+
+        <div class="field">
+          <label>Payment Method <span>*</span></label>
+          <select id="editPayment">
+            <option value="">Select payment method</option>
+            <option value="Cash">Cash</option>
+            <option value="UPI">UPI</option>
+            <option value="Card">Card</option>
+            <option value="Other">Other</option>
+          </select>
+          <small class="error" id="editPaymentError"></small>
+        </div>
+
+        <button type="submit" class="gold-btn submit-btn">Save Changes</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete confirmation -->
+  <div id="deleteModal" class="popup-overlay hidden">
+    <div class="confirm-modal">
+      <div class="warning-icon">!</div>
+      <h3>Delete Entry?</h3>
+      <p id="deleteMessage">This entry will be permanently deleted.</p>
+      <div class="confirm-actions">
+        <button id="cancelDeleteBtn" class="outline-btn">Cancel</button>
+        <button id="confirmDeleteBtn" class="delete-confirm-btn">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success popup -->
+  <div id="successPopup" class="popup-overlay hidden">
+    <div class="popup">
+      <div class="success-icon">✓</div>
+      <h3>Data Added Successfully</h3>
+      <button id="successOkBtn" class="gold-btn">OK</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
